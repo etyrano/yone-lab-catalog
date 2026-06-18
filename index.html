@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Y.ONE LAB · 콘텐츠 카탈로그</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { font-family:'Pretendard','Noto Sans KR',-apple-system,BlinkMacSystemFont,sans-serif; color:#0F1419; line-height:1.65; background:#FFFFFF; -webkit-font-smoothing:antialiased; }
+  img { display:block; max-width:100%; height:auto; }
+
+  /* HEADER — 압축형 */
+  .header { padding:36px 56px 32px; background:#0A1F44; color:#FFFFFF; }
+  .header .row { display:flex; align-items:center; gap:14px; margin:0 0 14px; }
+  .header .row .line { display:inline-block; width:24px; height:1px; background:#C9A87A; }
+  .header .row p { margin:0; font-size:10px; color:#C9A87A; font-weight:600; letter-spacing:2.5px; }
+  .header h1 { font-size:24px; font-weight:800; letter-spacing:-0.5px; margin:0 0 6px; }
+  .header h1 span { color:#C9A87A; }
+  .header .meta { font-size:11.5px; color:#9BA5B5; letter-spacing:0.5px; }
+  .header .meta b { color:#C9A87A; font-weight:600; }
+
+  /* CATALOG */
+  .catalog { padding:48px 56px 80px; background:#FFFFFF; }
+
+  .item { padding:56px 0 64px; border-top:1px solid #EFE6D4; }
+  .item:first-child { border-top:none; padding-top:32px; }
+  .item:last-child { border-bottom:1px solid #EFE6D4; }
+
+  .item .top { display:grid; grid-template-columns:140px 1fr; gap:32px; align-items:flex-start; margin:0 0 36px; }
+  .item .top .num-col p.num { font-size:72px; font-weight:800; line-height:1; color:#C9A87A; letter-spacing:-2.5px; margin:0 0 10px; }
+  .item .top .num-col p.label { font-size:11px; color:#8A7960; font-weight:600; letter-spacing:2.5px; margin:0; }
+
+  .item .top .info-col h3 { font-size:30px; font-weight:800; color:#0A1F44; letter-spacing:-0.7px; line-height:1.2; margin:0 0 14px; }
+  .item .top .info-col .desc { font-size:15px; color:#374151; line-height:1.85; margin:0 0 18px; }
+  .item .top .info-col .features { display:flex; gap:8px; flex-wrap:wrap; margin:0; padding:0; list-style:none; }
+  .item .top .info-col .features li { font-size:12.5px; color:#5A6275; padding:4px 10px; background:#FAF7F1; border:1px solid #EFE6D4; border-radius:2px; font-weight:500; }
+
+  /* 이미지 갤러리 */
+  .gallery { display:grid; gap:14px; }
+  .gallery.cols-2 { grid-template-columns:1fr 1fr; }
+  .gallery.cols-3 { grid-template-columns:1fr 1fr 1fr; }
+
+  .thumb { position:relative; border:1px solid #EFE6D4; background:#FAF7F1; overflow:hidden; aspect-ratio:1/1.414; box-shadow:0 4px 16px rgba(10,31,68,0.06); }
+  .thumb img { width:100%; height:100%; object-fit:cover; object-position:top center; }
+  .thumb .badge { position:absolute; top:12px; left:12px; padding:4px 10px; background:rgba(10,31,68,0.88); color:#C9A87A; font-size:10px; font-weight:700; letter-spacing:1.5px; border-radius:2px; }
+
+  .placeholder { aspect-ratio:1/1.414; background:#FAF7F1; border:1px dashed #C9A87A; display:flex; align-items:center; justify-content:center; }
+  .placeholder p { font-size:12px; color:#8A7960; font-weight:600; letter-spacing:1.5px; text-align:center; line-height:1.6; }
+
+  /* CTA */
+  .cta { padding:64px 56px 72px; background:#0A1F44; color:#FFFFFF; }
+  .cta .row { display:flex; align-items:center; gap:14px; margin:0 0 18px; }
+  .cta .row .line { display:inline-block; width:24px; height:1px; background:#C9A87A; }
+  .cta .row p { margin:0; font-size:10px; color:#C9A87A; font-weight:600; letter-spacing:2.5px; }
+  .cta h2 { font-size:28px; font-weight:800; line-height:1.3; margin:0 0 20px; letter-spacing:-0.6px; }
+  .cta h2 span { color:#C9A87A; }
+  .cta .divider { width:48px; height:2px; background:#C9A87A; margin:0 0 20px; }
+  .cta p { font-size:14px; color:#D5DBE5; line-height:1.85; margin:0; }
+  .cta p b { color:#FFFFFF; font-weight:700; }
+
+  /* FOOTER */
+  .footer { padding:24px 56px; background:#061331; color:#9BA5B5; font-size:11px; text-align:center; letter-spacing:1px; }
+  .footer span { color:#C9A87A; }
+
+  /* RESPONSIVE — Tablet */
+  @media (max-width: 900px) {
+    .header, .catalog, .cta, .footer { padding-left:24px; padding-right:24px; }
+    .item .top { grid-template-columns:96px 1fr; gap:20px; }
+    .item .top .num-col p.num { font-size:48px; }
+    .item .top .info-col h3 { font-size:24px; }
+  }
+
+  /* RESPONSIVE — Mobile */
+  @media (max-width: 600px) {
+    .header { padding:24px 16px 22px; }
+    .header h1 { font-size:20px; margin-bottom:8px; }
+    .header .meta { font-size:11px; line-height:1.7; }
+    .header .row { margin-bottom:12px; }
+    .header .row p { font-size:9.5px; letter-spacing:2px; }
+
+    .catalog { padding:32px 16px 56px; }
+    .item { padding:36px 0 40px; }
+    .item:first-child { padding-top:8px; }
+    .item .top { grid-template-columns:1fr; gap:14px; margin-bottom:22px; }
+    .item .top .num-col { display:flex; align-items:baseline; gap:14px; }
+    .item .top .num-col p.num { font-size:42px; margin:0; }
+    .item .top .num-col p.label { font-size:10px; letter-spacing:2px; }
+    .item .top .info-col h3 { font-size:21px; margin-bottom:10px; }
+    .item .top .info-col .desc { font-size:13.5px; line-height:1.75; margin-bottom:14px; }
+    .item .top .info-col .features { gap:6px; }
+    .item .top .info-col .features li { font-size:11px; padding:3px 8px; }
+
+    .gallery { gap:8px; }
+    .gallery.cols-2 { grid-template-columns:1fr 1fr; }
+    .gallery.cols-3 { grid-template-columns:1fr 1fr; }
+    .gallery.cols-3 .thumb:nth-child(3) { grid-column:1 / -1; max-width:50%; margin:0 auto; width:calc(50% - 4px); }
+
+    .thumb .badge { font-size:8.5px; padding:3px 7px; top:8px; left:8px; letter-spacing:1px; }
+    .placeholder p { font-size:10.5px; }
+
+    .cta { padding:48px 16px 56px; }
+    .cta h2 { font-size:22px; line-height:1.35; margin-bottom:16px; }
+    .cta .row { margin-bottom:14px; }
+    .cta .row p { font-size:9.5px; letter-spacing:2px; }
+    .cta p { font-size:13px; line-height:1.8; }
+    .cta .divider { margin-bottom:16px; }
+
+    .footer { padding:18px 16px; font-size:10px; letter-spacing:0.5px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER 압축 -->
+<header class="header">
+  <div class="row">
+    <span class="line"></span>
+    <p>Y.ONE LAB · CONTENT CATALOG 2026</p>
+  </div>
+  <h1>콘텐츠 <span>카탈로그</span></h1>
+  <p class="meta">학교별 내신 맞춤 자료 · <b>8 categories</b> · <b>7+ schools</b> · <b>4 cycles / year</b></p>
+</header>
+
+<!-- CATALOG -->
+<section class="catalog">
+
+  <!-- 01 분석본 -->
+  <div class="item">
+    <div class="top">
+      <div class="num-col">
+        <p class="num">01</p>
+        <p class="label">ANALYSIS</p>
+      </div>
+      <div class="info-col">
+        <h3>분석본</h3>
+        <p class="desc">시험 범위 모든 지문을 문장 단위로 해부합니다. 끊어 읽기·구문·핵심 표현·출제 포인트까지 한 권에.</p>
+        <ul class="features">
+          <li>지문별 끊어 읽기</li>
+          <li>구문 분석</li>
+          <li>학교별 출제 포인트</li>
+          <li>직독직해 병행</li>
+        </ul>
+      </div>
+    </div>
+    <div class="gallery cols-2">
+      <div class="thumb"><span class="badge">COVER</span><img src="images/01_분석본_표지-1.png" alt="분석본 표지"></div>
+      <div class="thumb"><span class="badge">INSIDE</span><img src="images/01_분석본_내지-02.png" alt="분석본 내지"></div>
+    </div>
+  </div>
+
+  <!-- 02 워크북 -->
+  <div class="item">
+    <div class="top">
+      <div class="num-col">
+        <p class="num">02</p>
+        <p class="label">WORKBOOK</p>
+      </div>
+      <div class="info-col">
+        <h3>워크북</h3>
+        <p class="desc">분석한 지문을 손으로 익히는 단계. 반복 학습용 문제와 빈칸 채우기로 체화시킵니다.</p>
+        <ul class="features">
+          <li>지문별 문제</li>
+          <li>빈칸 어휘</li>
+          <li>어법 포인트</li>
+          <li>자기주도 학습</li>
+        </ul>
+      </div>
+    </div>
+    <div class="gallery cols-2">
+      <div class="thumb"><span class="badge">COVER</span><img src="images/02_워크북_표지_앞면.png" alt="워크북 표지"></div>
+      <div class="thumb"><span class="badge">INSIDE</span><img src="images/02_워크북_내지-005.png" alt="워크북 내지"></div>
+    </div>
+  </div>
+
+  <!-- 03 세미모의고사 변형문제 -->
+  <div class="item">
+    <div class="top">
+      <div class="num-col">
+        <p class="num">03</p>
+        <p class="label">SEMI MOCK</p>
+      </div>
+      <div class="info-col">
+        <h3>세미모의고사 변형문제</h3>
+        <p class="desc">실제 시험과 같은 형식·난이도의 변형 문제. 출제 패턴을 미리 경험하게 합니다.</p>
+        <ul class="features">
+          <li>학교별 출제 유형</li>
+          <li>지문·문항 변형</li>
+          <li>객관식 + 서술형</li>
+          <li>실전 감각 형성</li>
+        </ul>
+      </div>
+    </div>
+    <div class="gallery cols-2">
+      <div class="thumb"><span class="badge">COVER</span><img src="images/03_세미모고_표지-01.png" alt="세미모의고사 표지"></div>
+      <div class="thumb"><span class="badge">INSIDE</span><img src="images/03_세미모고_내지-03.png" alt="세미모의고사 내지"></div>
+    </div>
+  </div>
+
+  <!-- 04 포켓북 (3개) -->
+  <div class="item">
+    <div class="top">
+      <div class="num-col">
+        <p class="num">04</p>
+        <p class="label">POCKET</p>
+      </div>
+      <div class="info-col">
+        <h3>포켓북</h3>
+        <p class="desc">언제 어디서나 꺼내 보는 휴대용 학습서. 어휘·동의어·삽화로 핵심을 압축.</p>
+        <ul class="features">
+          <li>핵심 어휘</li>
+          <li>동의어 정리</li>
+          <li>이미지 연상 학습</li>
+          <li>이동 중 학습 최적</li>
+        </ul>
+      </div>
+    </div>
+    <div class="gallery cols-3">
+      <div class="thumb"><span class="badge">COVER</span><img src="images/04_포켓북_표지_앞면-2.png" alt="포켓북 표지"></div>
+      <div class="thumb"><span class="badge">SYNONYM</span><img src="images/04_포켓북_p40-040.png" alt="포켓북 동의어 페이지"></div>
+      <div class="thumb"><span class="badge">VISUAL</span><img src="images/04_포켓북_p20-020.png" alt="포켓북 삽화 페이지"></div>
+    </div>
+  </div>
+
+  <!-- 05 직전보충 (파이널, 3개) -->
+  <div class="item">
+    <div class="top">
+      <div class="num-col">
+        <p class="num">05</p>
+        <p class="label">FINAL PUSH</p>
+      </div>
+      <div class="info-col">
+        <h3>직전보충 · 파이널</h3>
+        <p class="desc">시험 직전 마무리 학습. 영작 배열·빈칸 어휘 등 시험 전 마지막 점검 콘텐츠.</p>
+        <ul class="features">
+          <li>영작 배열 훈련</li>
+          <li>빈칸 어휘 점검</li>
+          <li>고난도·서술형 대비</li>
+          <li>D-7 집중 마무리</li>
+        </ul>
+      </div>
+    </div>
+    <div class="gallery cols-3">
+      <div class="thumb"><span class="badge">COVER</span><img src="images/05_직전보충_표지-01.png" alt="직전보충 표지"></div>
+      <div class="thumb"><span class="badge">ARRANGE</span><img src="images/05_파이널_p15-15.png" alt="파이널 영작배열"></div>
+      <div class="thumb"><span class="badge">BLANK</span><img src="images/05_파이널_p25-25.png" alt="파이널 빈칸 어휘"></div>
+    </div>
+  </div>
+
+  <!-- 06 동형모의고사 -->
+  <div class="item">
+    <div class="top">
+      <div class="num-col">
+        <p class="num">06</p>
+        <p class="label">FULL MOCK</p>
+      </div>
+      <div class="info-col">
+        <h3>동형모의고사</h3>
+        <p class="desc">실제 시험과 동일한 형식·시간·문항 수의 풀 모의고사. 진짜 시험처럼 풀어보는 단계.</p>
+        <ul class="features">
+          <li>학교별 시험지 동형</li>
+          <li>난이도·구성 일치</li>
+          <li>해설지·등급컷</li>
+          <li>실전 시간 분배</li>
+        </ul>
+      </div>
+    </div>
+    <div class="gallery cols-2">
+      <div class="thumb"><span class="badge">COVER</span><img src="images/06_동형모고_표지-1.png" alt="동형모의고사 표지"></div>
+      <div class="thumb"><span class="badge">INSIDE</span><img src="images/06_동형모고_내지-2.png" alt="동형모의고사 내지"></div>
+    </div>
+  </div>
+
+  <!-- 07 리뷰테스트 (placeholder) -->
+  <div class="item">
+    <div class="top">
+      <div class="num-col">
+        <p class="num">07</p>
+        <p class="label">REVIEW TEST</p>
+      </div>
+      <div class="info-col">
+        <h3>리뷰테스트</h3>
+        <p class="desc">학습 진도에 맞춰 누적된 내용을 점검하는 미니 테스트. 학생이 어디까지 흡수했는지 정확히 측정합니다.</p>
+        <ul class="features">
+          <li>주차별 누적 점검</li>
+          <li>약점 영역 자동 분류</li>
+          <li>학부모 리포트 연동</li>
+          <li>다음 학습 방향 제시</li>
+        </ul>
+      </div>
+    </div>
+    <div class="gallery cols-2">
+      <div class="placeholder"><p>샘플 이미지<br>준비 중</p></div>
+      <div class="placeholder"><p>샘플 이미지<br>준비 중</p></div>
+    </div>
+  </div>
+
+  <!-- 08 클리닉 (placeholder) -->
+  <div class="item">
+    <div class="top">
+      <div class="num-col">
+        <p class="num">08</p>
+        <p class="label">CLINIC</p>
+      </div>
+      <div class="info-col">
+        <h3>클리닉</h3>
+        <p class="desc">학생별 약점에 맞춘 1:1 처방 자료. 일률적인 보충이 아니라, 진단 결과 기반 맞춤 학습.</p>
+        <ul class="features">
+          <li>진단 기반 처방</li>
+          <li>오답 유형별 훈련</li>
+          <li>개별 맞춤 학습</li>
+          <li>약점 소거형 구조</li>
+        </ul>
+      </div>
+    </div>
+    <div class="gallery cols-2">
+      <div class="placeholder"><p>샘플 이미지<br>준비 중</p></div>
+      <div class="placeholder"><p>샘플 이미지<br>준비 중</p></div>
+    </div>
+  </div>
+
+</section>
+
+<!-- CTA -->
+<section class="cta">
+  <div class="row">
+    <span class="line"></span>
+    <p>INQUIRY · CONTACT US</p>
+  </div>
+  <h2>구매·도입 문의는<br><span>와이원 본사</span>로 연락 주세요.</h2>
+  <div class="divider"></div>
+  <p><b>Y.ONE Headquarters</b><br>서울 강동구 천호대로 569, 4층 403호<br>학교·학원 단위 공급 및 콘텐츠 컨설팅 가능</p>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  © 2026 <span>Y.ONE LAB</span> · 와이원 · All contents are property of Y.ONE.
+</footer>
+
+</body>
+</html>
